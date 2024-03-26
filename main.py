@@ -227,48 +227,21 @@ def simple_iteration_method(number, a, b, e, max_iteration):
 
 
 def newton_method(number, a, b, e, max_iteration):
-    # Удаляем пробелы из ввода уравнений
-    # equation1 = equation1.replace(" ", "")
-    # equation2 = equation2.replace(" ", "")
 
-    # Проверяем, в каком уравнении находится равно и меняем стороны уравнения
-    # if "=" in equation1:
-    #     parts = equation1.split("=")
-    #     equation1 = parts[0] + "-(" + parts[1] + ")"
-    # else:
-    #     parts = equation1.split("=")
-    #     equation1 = parts[1] + "-" + parts[0]
-    #
-    # if "=" in equation2:
-    #     parts = equation2.split("=")
-    #     equation2 = parts[0] + "-(" + parts[1] + ")"
-    # else:
-    #     parts = equation2.split("=")
-    #     equation2 = parts[1] + "-" + parts[0]
-    # x, y = symbols('x y')
-    # func1 = sympify(equation1)
-    # func2 = sympify(equation2)
-    df_dx, df_dy, dg_dx, dg_dy = diff_system(number, a, b)
-    print(str(df_dx) + "   " + str(df_dy) + "   " + str(dg_dx) + "   " + str(dg_dy))
-    # delta_x, delta_y = symbols('delta_x, delta_y')d
-    # first_line = df_dx * delta_x + df_dy * delta_y
-    # second_line = dg_dx * delta_x + dg_dy * delta_y
+    # df_dx, df_dy, dg_dx, dg_dy = diff_system(number, a, b)
+    # print(str(df_dx) + "   " + str(df_dy) + "   " + str(dg_dx) + "   " + str(dg_dy))
+    # first_line, second_line = system(number, a, b)
     # print(first_line)
     # print(second_line)
-    first_line, second_line = system(number, a, b)
-    print(first_line)
-    print(second_line)
-    left_side = np.array([[df_dx, df_dy], [dg_dx, dg_dy]])
-    right_side = np.array([first_line, second_line])
-    delta_x, delta_y = np.linalg.inv(left_side).dot(right_side)
-    print(delta_x)
-    print(delta_y)
-    x_0 = a
-    y_0 = b
-    x_i = x_0 + delta_x
-    y_i = y_0 + delta_y
-    print(x_i)
-    print(y_i)
+    # left_side = np.array([[df_dx, df_dy], [dg_dx, dg_dy]])
+    # right_side = np.array([first_line, second_line])
+    # delta_x, delta_y = np.linalg.inv(left_side).dot(right_side)
+    # print(delta_x)
+    # print(delta_y)
+    x_0 = 0
+    y_0 = 0
+    x_i = a
+    y_i = b
     iteration = 0
     while abs(x_i - x_0) > e or abs(y_i - y_0) > e:
         x_0 = x_i
