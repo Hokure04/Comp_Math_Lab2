@@ -30,7 +30,7 @@ def diff_func(number, x):
         return np.cos(x)
 
 
-def get_parameter():
+def get_parameter(number):
     a = float(input("Введите точку a: "))
     b = float(input("Введите точку b: "))
     if a > b:
@@ -38,7 +38,10 @@ def get_parameter():
         while a > b:
             a = float(input("Введите точку a: "))
             b = float(input("Введите точку b: "))
-
+    if func(number, a) * func(number, b) > 0:
+        print('На данном интервале более одного корня, либо их вовсе нет')
+        print()
+        return
     e = float(input("Введите точночть: "))
     if e < 0:
         while e < 0:
@@ -48,13 +51,13 @@ def get_parameter():
 
 
 def draw_graph(number, a, b):
-    if(b-a) > 100:
+    if abs(b - a) > 1.9:
         print('Отрезок слишком велик, попробуйте уменьшить границы отрезка')
     fig, ax = plt.subplots()
     ax.set_title('График функции')
     ax.set_xlabel('x')
     ax.set_ylabel('y')
-    x = np.linspace(a-3, b+3)
+    x = np.linspace(a - 3, b + 3)
     y = []
     for val in x:
         y.append(func(number, val))
@@ -64,33 +67,36 @@ def draw_graph(number, a, b):
     plt.show()
 
 
-
 def get_method():
     max_iteration = 50
-    print('\t', '1: Метод половинного деления.')
-    print('\t', '2: Метод секущих.')
-    print('\t', '3: Метод простой итерации.')
-    print('\t', '4: Метод Ньютона.')
-    param = int(input('Введите номер метода, который хотите использовать: '))
-    if param == 1:
-        number = chose_function()
-        a, b, e = get_parameter()
-        half_division_method(number, a, b, e, max_iteration)
-    elif param == 2:
-        number = chose_function()
-        x_0 = float(input("Введите начальное приближение: "))
-        x_i = float(input("Введите значенеи рядом с начальным приближением: "))
-        e = float(input("Введите точность: "))
-        secant_method(number, e, x_0, x_i, max_iteration)
-    elif param == 3:
-        number = chose_function()
-        a, b, e = get_parameter()
-        simple_iteration_method(number, a, b, e, max_iteration)
-    elif param == 4:
-        a, b, e = get_parameter()
-        equation1 = input("Введите первое уравнение системы: ")
-        equation2 = input("Введите второе уравнение системы: ")
-        newton_method(equation1, equation2, a, b, e, max_iteration)
+    while True:
+        print('\t', '1: Метод половинного деления.')
+        print('\t', '2: Метод секущих.')
+        print('\t', '3: Метод простой итерации.')
+        print('\t', '4: Метод Ньютона.')
+        param = int(input('Введите номер метода, который хотите использовать: '))
+        try:
+            if param == 1:
+                number = chose_function()
+                a, b, e = get_parameter(number)
+                half_division_method(number, a, b, e, max_iteration)
+            elif param == 2:
+                number = chose_function()
+                a, b, e = get_parameter(number)
+                secant_method(number, e, a, b, max_iteration)
+            elif param == 3:
+                number = chose_function()
+                a, b, e = get_parameter(number)
+                simple_iteration_method(number, a, b, e, max_iteration)
+            elif param == 4:
+                a, b, e = get_parameter()
+                equation1 = input("Введите первое уравнение системы: ")
+                equation2 = input("Введите второе уравнение системы: ")
+                newton_method(equation1, equation2, a, b, e, max_iteration)
+        except TypeError:
+            print('Ошибка: вы ввели некорректный параметр')
+        except ValueError:
+            print('Ошибка: значение параметра не может быть пустым')
 
 
 def half_division_method(number, a, b, e, max_iteration):
@@ -111,8 +117,7 @@ def half_division_method(number, a, b, e, max_iteration):
         row = [iteration, a, b, x_val, f_a, f_b, f_x, abs(a - b)]
         table.append(row)
         if iteration > max_iteration:
-            print("Количество итераций превысило лимит")
-            print(iteration)
+            print("Количество итераций превысило лимит: "+str(iteration))
             return
     headers = ["№ итерации", "a", "b", "x", "F(a)", "F(b)", "F(x)", "|a-b|"]
     print(tabulate(table, headers=headers, tablefmt="pretty"))
@@ -134,53 +139,40 @@ def secant_method(number, e, x_prev, x_i, max_iteration):
         row = [iteration, x_prev, x_i, x_next, f_x, abs(x_next - x_i)]
         table.append(row)
         if iteration > max_iteration:
-            print("Количество итераций превысило лимит")
+            print("Количество итераций превысило лимит: " + str(iteration))
             return
-    headers = ["№ итерации", "x прошлое", "x", "x следующее", "F(x)", "|a-b|"]
+    headers = ["№ итерации", "x_prev", "x", "x_next", "F(x_next)", "|a-b|"]
     print(tabulate(table, headers=headers, tablefmt="pretty"))
 
 
 def simple_iteration_method(number, a, b, e, max_iteration):
-    # x = symbols('x')
-    # if number == 1:
-    #     func = x ** 3 - x + 4
-    # elif number == 2:
-    #     func = x ** 3 - 2.92 * (x ** 2) + 1.435 * x + 0.791
-    # elif number == 3:
-    #     func = np.sin(x) + 0.1
-    # # func = sympify(equation)
-
-    df_func = diff(func)
     f_a = float(diff_func(number, a))
     f_b = float(diff_func(number, b))
-    draw_graph(number, f_a, f_b)
-    lambd = -1 / max(f_a, f_b)
-    # x_val = lambd * func + x
-    # diff_x_val = diff(x_val)
+    draw_graph(number, a, b)
+    method_lambda = -1 / max(f_a, f_b)
     table = []
-    left_interval_check = float(diff_func(number, a)+1)
-    right_interval_check = float(diff_func(number, b)+1)
-    print(left_interval_check)
-    print(right_interval_check)
+    left_interval_check = float(method_lambda*diff_func(number, a)+1)
+    right_interval_check = float(method_lambda*diff_func(number, b) + 1)
+    # print(left_interval_check)
+    # print(right_interval_check)
     if (left_interval_check < 1) and (right_interval_check < 1):
         print('условие сходимости выполняется!')
         x_i = a
-        x_next = float(lambd*func(number, x_i)+x_i)
+        x_next = float(method_lambda * func(number, x_i) + x_i)
         iteration = 0
         while abs(x_next - x_i) > e:
+            fi = float(method_lambda * func(number, x_next) + x_next)
             if iteration != 0:
                 x_i = x_next
                 x_next = fi
-            fi = float(lambd*func(number, x_next)+x_next)
             f_value = float(func(number, x_next))
-            row = [iteration, x_i, x_next, fi, f_value,  abs(x_next - x_i)]
-            # print(str(x_i) + '   ' + str(x_next) + '   ' + str(fi) + '   ' + str(f_value) + '   ' + str(abs(x_next - x_i)))
+            row = [iteration, x_i, x_next, fi, f_value, abs(x_next - x_i)]
             table.append(row)
             iteration += 1
             if iteration > max_iteration:
-                print("Количество итераций превысило лимит")
+                print("Количество итераций превысило лимит: " + str(iteration))
                 return
-    headers = ["№ итерации", "x", "x следующее", "фи", "F(x)", "|a-b|"]
+    headers = ["№ итерации", "x", "x_next", "ф", "F(x_next)", "|a-b|"]
     print(tabulate(table, headers=headers, tablefmt="pretty"))
 
 
