@@ -1,4 +1,3 @@
-from sympy import *
 import matplotlib.pyplot as plt
 import numpy as np
 from tabulate import tabulate
@@ -227,17 +226,6 @@ def simple_iteration_method(number, a, b, e, max_iteration):
 
 
 def newton_method(number, a, b, e, max_iteration):
-
-    # df_dx, df_dy, dg_dx, dg_dy = diff_system(number, a, b)
-    # print(str(df_dx) + "   " + str(df_dy) + "   " + str(dg_dx) + "   " + str(dg_dy))
-    # first_line, second_line = system(number, a, b)
-    # print(first_line)
-    # print(second_line)
-    # left_side = np.array([[df_dx, df_dy], [dg_dx, dg_dy]])
-    # right_side = np.array([first_line, second_line])
-    # delta_x, delta_y = np.linalg.inv(left_side).dot(right_side)
-    # print(delta_x)
-    # print(delta_y)
     x_0 = 0
     y_0 = 0
     x_i = a
@@ -263,37 +251,6 @@ def newton_method(number, a, b, e, max_iteration):
         y_i = y_0 + delta_y
         print(x_i)
         print(y_i)
-        # first_right_part = -1 * func1
-        # second_right_part = -1 * func2
-        # first_right_part = first_right_part.subs(x, x_0)
-        # first_right_part = float(first_right_part.subs(y, y_0))
-        # second_right_part = second_right_part.subs(x, x_0)
-        # second_right_part = float(second_right_part.subs(y, y_0))
-        # # print(first_right_part)
-        # # print(second_right_part)
-        # first_left_part = first_line.subs(x, x_0)
-        # first_left_part = first_left_part.subs(y, y_0)
-        # second_left_part = second_line.subs(x, x_0)
-        # second_left_part = second_left_part.subs(y, y_0)
-        # # print(first_left_part)
-        # # print(second_left_part)
-        # parts = str(first_left_part).split(" + ")
-        # if len(parts) == 1:
-        #     parts = str(first_left_part).split(" - ")
-        # var2 = sympify(parts[1])
-        # final_delta_x = (first_right_part - var2) / df_dx.subs(x, x_0)
-        # second_left_part = second_left_part.subs(delta_x, final_delta_x)
-        # # print(second_left_part)
-        # parts_2 = str(second_left_part).split(" + ")
-        # if len(parts_2) == 1:
-        #     parts_2 = str(second_left_part).split(" - ")
-        # var2 = sympify(parts_2[1])
-        # var1 = parts_2[0].split("*")
-        # multiplier = var1[0]
-        # final_delta_y = (second_right_part - var2) / float(multiplier)
-        # final_delta_x = final_delta_x.subs(delta_y, final_delta_y)
-        # x_i = a + final_delta_x
-        # y_i = b + final_delta_y
         if iteration > max_iteration:
             print("Количество итераций превысило лимит")
             return
